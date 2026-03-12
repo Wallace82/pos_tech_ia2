@@ -1,18 +1,18 @@
-Solucionador de TSP usando Algoritmo Genético
+# Solucionador de TSP usando Algoritmo Genético
 
 Este repositório contém uma implementação em Python de um solucionador para o Problema do Caixeiro Viajante (Traveling Salesman Problem - TSP) utilizando um Algoritmo Genético (GA).
 
 O TSP é um problema clássico da área de otimização combinatória, onde o objetivo é encontrar a menor rota possível que visite um conjunto de cidades exatamente uma vez e retorne à cidade de origem.
 
-Visão Geral
+## Visão Geral
 
 O solucionador de TSP utiliza um Algoritmo Genético para evoluir iterativamente uma população de soluções candidatas até encontrar uma solução ótima ou próxima do ótimo.
 
 O algoritmo genético funciona imitando o processo de seleção natural, no qual indivíduos com maior aptidão (fitness) — neste caso, rotas com menor distância total — têm maior probabilidade de sobreviver e gerar descendentes.
 
-Arquivos
+## Arquivos
 
-genetic_algorithm.py
+** genetic_algorithm.py **
 Contém a implementação do Algoritmo Genético, incluindo funções para:
 
 gerar populações aleatórias
@@ -25,7 +25,7 @@ realizar mutação
 
 ordenar populações com base no fitness.
 
-tsp.py
+** tsp.py ** 
 Implementa o solucionador principal do TSP, utilizando Pygame para visualização.
 Ele:
 
@@ -37,10 +37,10 @@ evolui a população iterativamente
 
 mostra visualmente a melhor solução encontrada até o momento.
 
-draw_functions.py
+** draw_functions.py ** 
 Fornece funções para desenhar cidades, caminhos e gráficos utilizando Pygame.
 
-Uso
+## Uso
 
 Para executar o solucionador de TSP, execute o script tsp.py utilizando Python.
 
@@ -60,7 +60,7 @@ número de gerações
 
 probabilidade de mutação
 
-Dependências
+## Dependências
 
 Python 3.x
 
