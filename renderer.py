@@ -120,22 +120,35 @@ def draw_side_panel(
     screen.blit(route_title, (panel_x + 16, y))
     y += 22
 
+
+    column_width = (panel_width - 40) // 2
+    col1_x = panel_x + 16
+    col2_x = panel_x + 16 + column_width
+
+    start_y = y
+    line_height = 17
+
+    max_lines_per_column = (window_height - start_y - 20) // line_height
+
+    
     # LISTA DA ROTA COM BOLINHA DA MESMA COR DO MAPA
     for idx, point in enumerate(route, start=1):
         tipo = TIPOS_ATENDIMENTOS.get(point.tipo_atendimento, point.tipo_atendimento)
         color = get_priority_color(point.prioridade)
 
-        # bolinha colorida ao lado do item da rota
-        draw_colored_bullet(screen, panel_x + 22, y + 6, color, radius=5)
-
-        line = (
+        text  = (
             f"{idx}. P{point.id} {point.codigo} | "
             f"{tipo} | D:{point.quantidade} | T:{point.tempo_atendimento:.1f}h"
         )
-
-        line_surface = text_font.render(line, True, BLACK)
-        screen.blit(line_surface, (panel_x + 36, y))
-        y += 17
         
-        if y > window_height - 20:
-            break
+        text_surface = text_font.render(text, True, BLACK)
+        
+        if idx <= max_lines_per_column:
+            draw_colored_bullet(screen, col1_x + 6, start_y + (idx-1)*line_height + 6, color)
+            screen.blit(text_surface, (col1_x + 18, start_y + (idx-1)*line_height))
+            
+        else:
+            second_idx = idx - max_lines_per_column
+
+            draw_colored_bullet(screen, col2_x + 6, start_y + (second_idx-1)*line_height + 6, color)
+            screen.blit(text_surface, (col2_x + 18, start_y + (second_idx-1)*line_height))

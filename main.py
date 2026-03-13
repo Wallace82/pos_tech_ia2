@@ -79,6 +79,8 @@ def main():
             best_fitness = current_best_fitness
             best_route = current_best_route[:]
         
+        print(f"Generation {generation}: Best fitness = {round(best_fitness, 2)}")
+        
         screen.fill((255, 255, 255))
         screen.blit(map_surface, (0, 0))
 
