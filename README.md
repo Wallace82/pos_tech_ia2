@@ -72,6 +72,20 @@ Responsável por:
 
 ---
 
+**genetic_algorithm.py**
+
+Contém a implementação central do algoritmo genético.
+
+Funções principais:
+
+- `calculate_fitness`: Avalia a qualidade de uma rota com base na distância e em um sistema de penalidades.
+- `evolve_population`: Orquestra a evolução da população a cada geração, aplicando seleção, crossover e mutação.
+- `selection_by_tournament`: Implementa o método de seleção por torneio.
+- `order_crossover`: Realiza o cruzamento de dois pais para gerar um novo indivíduo.
+- `mutate`: Aplica operadores de mutação para introduzir diversidade.
+
+---
+
 **pontos.py**
 
 Define as estruturas de dados utilizadas no sistema.
@@ -178,6 +192,42 @@ O sistema apresenta:
 - pontos de atendimento coloridos por prioridade
 - linhas conectando os pontos da rota
 - painel lateral com a sequência de atendimento
+
+---
+
+# Detalhes do Algoritmo Genético
+
+A otimização das rotas é realizada por um algoritmo genético customizado para o problema de roteirização de veículos com restrições. Abaixo estão os detalhes técnicos da sua implementação.
+
+### Representação (Cromossomo)
+Cada indivíduo da população, ou **cromossomo**, é representado como uma lista (permutação) de `ServicePoint`. A ordem dos pontos na lista define a sequência da rota de atendimento.
+
+### Função de Fitness (Avaliação)
+O objetivo do algoritmo é **minimizar** o valor de fitness. Uma rota de baixo custo é considerada de alta qualidade (mais "apta"). A função `calculate_fitness` não se baseia apenas na distância, mas em um custo total que inclui um sistema de penalidades para violação das restrições do negócio:
+
+- **Distância Euclidiana**: A distância total percorrida na rota.
+- **Penalidade de Janela de Tempo**: Aplica uma penalidade se o atendimento ocorrer **após** o fim da janela de tempo definida para o ponto. Atrasos em pontos de maior prioridade resultam em penalidades mais severas.
+- **Penalidade de Capacidade**: Penaliza a rota se a soma das demandas dos pontos exceder a capacidade máxima do veículo (`CAPACIDADE = 25`).
+- **Penalidade de Prioridade**: Adiciona um custo significativo por atraso no atendimento de pontos, ponderado pela prioridade do chamado.
+- **Penalidade de Refrigeração**: Aplica uma penalidade se o tempo de viagem entre dois pontos for muito longo para um item que exige temperatura controlada.
+
+### Seleção: Torneio
+O método de seleção implementado é o **torneio** (`selection_by_tournament`). A cada seleção, um pequeno grupo de indivíduos (`tournament_size = 4`) é escolhido aleatoriamente da população, e o indivíduo com o melhor fitness (menor custo) dentro desse grupo é selecionado como um dos pais para a próxima geração.
+
+### Crossover: Order Crossover (OX1)
+O operador de cruzamento é o **Order Crossover** (`order_crossover`). Este método é ideal para cromossomos baseados em permutação, pois garante que o filho gerado seja uma rota válida (sem pontos duplicados ou ausentes). Ele funciona da seguinte maneira:
+1. Um segmento aleatório da rota é copiado do **Pai 1** para o filho.
+2. Os pontos restantes são preenchidos na ordem em que aparecem no **Pai 2**, ignorando aqueles que já foram copiados do Pai 1.
+
+### Mutação
+Para introduzir variabilidade genética e evitar a convergência prematura para ótimos locais, são utilizados dois operadores de mutação (`mutate`):
+1. **Swap (Troca)**: Dois pontos aleatórios na rota são trocados de posição.
+2. **Inversion (Inversão)**: Uma subsequência aleatória de pontos na rota tem sua ordem invertida.
+
+A probabilidade de mutação é definida por `MUTATION_PROBABILITY = 0.20`.
+
+### Elitismo
+O algoritmo implementa o **elitismo** (`elite_size = 1`), garantindo que o melhor indivíduo da geração atual seja transferido diretamente para a próxima geração sem sofrer crossover ou mutação. Isso assegura que a qualidade da melhor solução encontrada nunca se degrade ao longo das gerações.
 
 ---
 
